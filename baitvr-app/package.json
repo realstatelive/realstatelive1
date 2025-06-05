@@ -1,0 +1,35 @@
+{
+  "name": "baitvr-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-oauth/google": "^0.12.2",
+    "@walletconnect/web3-provider": "^1.8.0",
+    "ethers": "^6.14.3",
+    "firebase": "^11.8.1",
+    "i18next": "^25.2.1",
+    "maplibre-gl": "^5.6.0",
+    "next": "15.3.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.5.2",
+    "swiper": "^11.2.8",
+    "three": "^0.177.0",
+    "web3.storage": "^4.5.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.3",
+    "typescript": "^5"
+  }
+}
