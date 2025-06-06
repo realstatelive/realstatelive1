@@ -2,18 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { properties as defaultProperties } from '../data/properties';
+import { propertyImages } from '../data/backgrounds';
 
 const MAP_TOKEN = '';
 const MAP_STYLE = 'https://api.maptiler.com/maps/streets/style.json?key=Get_Your_Free_Key';
 
-const propertyIcons = {
-  palace: '/images/palace.jpg',
-  villa: '/images/villa.jpg',
-  apartment: '/images/apartment.jpg',
-  clinic: '/images/clinic.jpg',
-  shop: '/images/shop.jpg',
-  office: '/images/office.jpg',
-};
+const propertyIcons = propertyImages;
 
 // مواقع افتراضية للوحدات (عشوائية لكل دولة)
 const locations = [
@@ -44,8 +38,8 @@ const MapView: React.FC<{ properties?: Property[] }> = ({ properties = defaultPr
       zoom: 3.5,
     });
 
-    properties.slice(0, 100).forEach((property, idx) => {
-      const loc = locations[idx % locations.length];
+    // استخدام lng و lat من بيانات الوحدة مباشرة
+    properties.slice(0, 100).forEach((property) => {
       const el = document.createElement('div');
       el.style.width = '36px';
       el.style.height = '36px';
@@ -53,12 +47,11 @@ const MapView: React.FC<{ properties?: Property[] }> = ({ properties = defaultPr
       el.style.overflow = 'hidden';
       el.style.border = '2px solid #fff';
       el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-      // معالجة نوع العقار ليكون من الأنواع المعروفة فقط
-      const iconUrl = propertyIcons[property.type as keyof typeof propertyIcons] || '/images/palace.jpg';
+      const iconUrl = propertyIcons[property.type as keyof typeof propertyIcons] || propertyIcons.palace;
       el.style.background = `url(${iconUrl}) center/cover`;
       el.title = property.title;
       new maplibregl.Marker(el)
-        .setLngLat([loc.lng, loc.lat])
+        .setLngLat([property.lng, property.lat])
         .setPopup(new maplibregl.Popup().setHTML(`<b>${property.title}</b><br/>${property.location}<br/>${property.status}`))
         .addTo(mapRef.current!);
     });
