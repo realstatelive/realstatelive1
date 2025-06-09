@@ -19,6 +19,8 @@ function generateProperties() {
     { type: 'clinic', title: 'عيادة', img: propertyImages.clinic },
     { type: 'shop', title: 'محل', img: propertyImages.shop },
     { type: 'office', title: 'مكتب', img: propertyImages.office },
+    { type: 'penthouse', title: 'بنتهاوس', img: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=1200&q=80', panorama360: ['https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=1200&q=80'] },
+    { type: 'townhouse', title: 'تاون هاوس', img: 'https://images.pexels.com/photos/261146/pexels-photo-261146.jpeg?auto=compress&w=1200&q=80', panorama360: ['https://images.pexels.com/photos/261146/pexels-photo-261146.jpeg?auto=compress&w=1200&q=80'] },
   ];
   const countries = [
     { name: 'مصر', city: 'القاهرة', lng: 31.2357, lat: 30.0444 },
@@ -32,6 +34,8 @@ function generateProperties() {
     { name: 'الجزائر', city: 'الجزائر العاصمة', lng: 3.0588, lat: 36.7538 },
     { name: 'المغرب', city: 'الدار البيضاء', lng: -7.5898, lat: 33.5731 },
   ];
+  const compounds = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, name: `كمبوند ${i + 1}` }));
+  const developers = Array.from({ length: 10 }, (_, i) => ({ id: i + 1, name: `مطور ${i + 1}` }));
   let arr: any[] = [];
   let id = 1;
   types.forEach((t) => {
@@ -47,6 +51,29 @@ function generateProperties() {
         details: `${t.title} بمواصفات عالمية، رقم الوحدة ${i + 1}.`,
         lng: country.lng,
         lat: country.lat,
+        panorama360: t.panorama360 || [
+          // صور بانوراما 360 مجانية لكل نوع عقار
+          t.type === 'palace' ? 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'villa' ? 'https://images.pexels.com/photos/261146/pexels-photo-261146.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'apartment' ? 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'clinic' ? 'https://images.pexels.com/photos/236380/pexels-photo-236380.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'shop' ? 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'office' ? 'https://images.pexels.com/photos/380768/pexels-photo-380768.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'penthouse' ? 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&w=1200&q=80' :
+          t.type === 'townhouse' ? 'https://images.pexels.com/photos/261146/pexels-photo-261146.jpeg?auto=compress&w=1200&q=80' :
+          '',
+        ],
+        model3d: t.type === 'palace' ? 'https://modelviewer.dev/shared-assets/models/Astronaut.glb' :
+          t.type === 'villa' ? 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb' :
+          t.type === 'apartment' ? 'https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb' :
+          t.type === 'clinic' ? 'https://modelviewer.dev/shared-assets/models/Car.glb' :
+          t.type === 'shop' ? 'https://modelviewer.dev/shared-assets/models/Chair.glb' :
+          t.type === 'office' ? 'https://modelviewer.dev/shared-assets/models/MaterialGallery.glb' :
+          t.type === 'penthouse' ? 'https://modelviewer.dev/shared-assets/models/Astronaut.glb' :
+          t.type === 'townhouse' ? 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb' :
+          '',
+        compound: compounds[i % compounds.length]?.name || '',
+        developer: developers[i % developers.length]?.name || '',
       });
     }
   });

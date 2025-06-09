@@ -96,6 +96,9 @@ a.secondary {
   grid-row-start: 3;
   display: flex;
   gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer a {
@@ -106,6 +109,26 @@ a.secondary {
 
 .footer img {
   flex-shrink: 0;
+}
+
+.footer button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, #2193b0 0%, #6dd5ed 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.footer button:hover {
+  background: linear-gradient(90deg, #6dd5ed 0%, #2193b0 100%);
 }
 
 /* Enable hover only on non-touch devices */
@@ -158,6 +181,19 @@ a.secondary {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+  }
+}
+
+@media (max-width: 800px) {
+  .search-bar {
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: stretch;
+  }
+  .search-bar input, .search-bar select {
+    min-width: 0 !important;
+    width: 100% !important;
+    font-size: 16px;
   }
 }
 
