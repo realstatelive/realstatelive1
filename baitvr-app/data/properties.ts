@@ -80,7 +80,67 @@ function generateProperties() {
   return arr;
 }
 
-export const properties = generateProperties();
+// لا تعيد تصدير properties مرتين، فقط استخدم getAllProperties في كل مكان في التطبيق
+// export const properties = generateProperties();
+
+// إضافة وحدات ومشاريع وكمباوندات افتراضية جديدة
+export function getAllProperties() {
+  const extraProperties = [
+    {
+      id: 1001,
+      title: 'قصر فاخر في القاهرة الجديدة',
+      type: 'palace',
+      developer: 'سوديك',
+      compound: 'سوديك ويست',
+      country: 'مصر',
+      location: 'القاهرة الجديدة',
+      area: 1200,
+      rooms: 8,
+      baths: 7,
+      lng: 31.5,
+      lat: 30.1,
+      model3d: '/models/palace.glb',
+      panorama360: ['/images/palace.jpg'],
+      details: 'قصر فخم مع مسبح وحديقة كبيرة، تشطيب سوبر لوكس.'
+    },
+    {
+      id: 1002,
+      title: 'شقة ذكية في دبي مارينا',
+      type: 'apartment',
+      developer: 'إعمار الإمارات',
+      compound: 'ميفيدا إعمار',
+      country: 'الإمارات',
+      location: 'دبي مارينا',
+      area: 180,
+      rooms: 3,
+      baths: 2,
+      lng: 55.13,
+      lat: 25.08,
+      model3d: '/models/apartment.glb',
+      panorama360: ['/images/apartment.jpg'],
+      details: 'شقة ذكية بإطلالة بحرية، مفروشة بالكامل، مع موقف خاص.'
+    },
+    {
+      id: 1003,
+      title: 'فيلا عائلية في الرياض',
+      type: 'villa',
+      developer: 'الدار العقارية',
+      compound: 'هايد بارك',
+      country: 'السعودية',
+      location: 'الرياض',
+      area: 350,
+      rooms: 5,
+      baths: 4,
+      lng: 46.7,
+      lat: 24.7,
+      model3d: '/models/villa.glb',
+      panorama360: ['/images/villa.jpg'],
+      details: 'فيلا عائلية مع جاردن ومسبح، قريبة من جميع الخدمات.'
+    },
+    // ...يمكنك إضافة المزيد لاحقًا...
+  ];
+  return [...generateProperties(), ...extraProperties];
+}
 
 // توليد بيانات ضخمة للمشروعات (50 مشروع)
 export const projects = Array.from({ length: 50 }).map((_, i) => {

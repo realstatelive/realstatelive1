@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { properties, projects } from "../data/properties";
+import { getAllProperties, projects } from "../data/properties";
 import dynamic from 'next/dynamic';
 const ModelViewer = dynamic(() => import('../components/ModelViewer'), { ssr: false });
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import Reviews from '../components/Reviews';
 import { useRouter } from 'next/router';
 import { notifyUser } from '../services/notifications';
 import VideoTour from '../components/VideoTour';
+import StatsBox from '../components/StatsBox';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,8 @@ interface Compound {
   city?: string;
   country: string;
 }
+
+const properties = getAllProperties();
 
 export default function Home() {
   const { t, i18n } = useTranslation();
@@ -211,6 +214,7 @@ export default function Home() {
             <VR360Gallery />
             <Reviews />
             <VideoTour />
+            <StatsBox />
             {/* <AdminPanel /> تم إزالته من الصفحة الرئيسية */}
           </main>
         </div>
@@ -220,6 +224,7 @@ export default function Home() {
     <button onClick={()=>window.location.href='/partners'} style={{background:'#00bcd4',color:'#fff',border:'none',borderRadius:8,padding:'8px 24px',fontWeight:'bold',fontSize:18,cursor:'pointer',marginBottom:8}}>شركاؤنا</button>
     <button onClick={()=>window.location.href='/about'} style={{background:'#00e676',color:'#fff',border:'none',borderRadius:8,padding:'8px 24px',fontWeight:'bold',fontSize:18,cursor:'pointer',marginBottom:8}}>من نحن</button>
     <button onClick={()=>window.location.href='/login'} style={{background:'#2196f3',color:'#fff',border:'none',borderRadius:8,padding:'8px 24px',fontWeight:'bold',fontSize:18,cursor:'pointer',marginBottom:8}}>تسجيل الدخول</button>
+    <button onClick={()=>window.location.href='/dev-panel'} style={{background:'#673ab7',color:'#fff',border:'none',borderRadius:8,padding:'8px 24px',fontWeight:'bold',fontSize:18,cursor:'pointer',marginBottom:8}}>لوحة تحكم المطورين</button>
   </div>
   <div style={{textAlign:'center',marginTop:24,color:'#00bcd4',fontSize:16,fontWeight:'bold'}}>
     <img src="/globe.svg" alt="logo" style={{width:32,verticalAlign:'middle',marginRight:8}} />

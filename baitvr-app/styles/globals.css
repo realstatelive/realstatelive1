@@ -26,6 +26,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #181c24;
+    color: #ededed;
+  }
+  .container, .card, .footer, .map-section, .vr-section {
+    background: #23272f !important;
+    color: #ededed !important;
+    box-shadow: 0 2px 16px #111 !important;
+  }
+  input, select, textarea {
+    background: #23272f !important;
+    color: #ededed !important;
+    border-color: #444 !important;
+  }
+  .section-title {
+    color: #00bcd4 !important;
+  }
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

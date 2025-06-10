@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { compounds } from '../data/compounds';
 import { developers } from '../data/developers';
-import { properties } from '../data/properties';
+import { getAllProperties } from '../data/properties';
+import ExportCSV from './ExportCSV';
 
 const initialForm = {
   title: '',
@@ -23,7 +24,7 @@ const initialForm = {
   details: '',
 };
 
-const TABS = ['الوحدات', 'المطورين', 'الكمباوندات', 'الإعلانات'];
+const TABS = ['الوحدات', 'المطورين', 'الكمباوندات', 'الإعلانات', 'المستخدمون'];
 
 const AdminPanel: React.FC = () => {
   const [form, setForm] = useState<any>(initialForm);
@@ -41,7 +42,7 @@ const AdminPanel: React.FC = () => {
 
   // تحديث بيانات التطبيق مباشرة
   useEffect(() => {
-    (properties as any).push(...units);
+    (getAllProperties as any).push(...units);
   }, [units]);
 
   const handleChange = (e: any) => {
@@ -132,6 +133,21 @@ const AdminPanel: React.FC = () => {
   };
   const handleDeleteAd = (id: number) => setAds((a) => a.filter((ad) => ad.id !== id));
 
+  // بيانات المستخدمين الجدد (محاكاة)
+  const [users, setUsers] = useState<any[]>([]);
+  useEffect(() => {
+    // في التطبيق الحقيقي: اجلب من قاعدة البيانات
+    const saved = localStorage.getItem('users');
+    if (saved) setUsers(JSON.parse(saved));
+    else setUsers([
+      { id: 1, name: 'مستخدم تجريبي', email: 'test@demo.com', type: 'عميل', date: '2025-06-09' },
+      { id: 2, name: 'مطور جديد', email: 'dev@demo.com', type: 'مطور', date: '2025-06-09' }
+    ]);
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('users', JSON.stringify(users));
+  }, [users]);
+
   return (
     <div style={{background:'#fff',borderRadius:16,padding:24,boxShadow:'0 2px 16px #e0e0e0',margin:'32px 0'}}>
       <div style={{display:'flex',gap:16,marginBottom:24}}>
@@ -140,78 +156,81 @@ const AdminPanel: React.FC = () => {
         ))}
       </div>
       {tab==='الوحدات' && (
-        <div style={{display:'flex',flexWrap:'wrap',gap:24}}>
-          <div style={{flex:1,minWidth:320}}>
-            <h4>إضافة وحدة جديدة</h4>
-            <input name="title" placeholder="اسم الوحدة" value={form.title} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <select name="type" value={form.type} onChange={handleChange} style={{width:'100%',margin:'4px 0'}}>
-              <option value="">نوع الوحدة</option>
-              <option value="palace">قصر</option>
-              <option value="villa">فيلا</option>
-              <option value="apartment">شقة</option>
-              <option value="clinic">عيادة</option>
-              <option value="shop">محل</option>
-              <option value="office">مكتب</option>
-              <option value="penthouse">بنتهاوس</option>
-              <option value="townhouse">تاون هاوس</option>
-            </select>
-            <select name="developer" value={form.developer} onChange={handleChange} style={{width:'100%',margin:'4px 0'}}>
-              <option value="">المطور العقاري</option>
-              {developers.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
-            </select>
-            <select name="compound" value={form.compound} onChange={handleChange} style={{width:'100%',margin:'4px 0'}}>
-              <option value="">الكمباوند</option>
-              {compounds.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-            </select>
-            <input name="owner" placeholder="اسم المالك (اختياري)" value={form.owner} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <input name="area" placeholder="المساحة (م²)" value={form.area} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <input name="rooms" placeholder="عدد الغرف" value={form.rooms} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <input name="baths" placeholder="عدد الحمامات" value={form.baths} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <label><input type="checkbox" name="pool" checked={form.pool} onChange={handleChange} /> حمام سباحة</label>
-            <label><input type="checkbox" name="garden" checked={form.garden} onChange={handleChange} /> جاردن</label>
-            <input name="contact" placeholder="بيانات التواصل" value={form.contact} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <input name="details" placeholder="تفاصيل إضافية" value={form.details} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
-            <div style={{margin:'8px 0'}}>صور بانوراما 360:
-              <input type="file" accept="image/*" multiple onChange={e => handleFile(e, 'panorama360')} />
+        <div>
+          <div style={{display:'flex',flexWrap:'wrap',gap:24}}>
+            <div style={{flex:1,minWidth:320}}>
+              <h4>إضافة وحدة جديدة</h4>
+              <input name="title" placeholder="اسم الوحدة" value={form.title} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <select name="type" value={form.type} onChange={handleChange} style={{width:'100%',margin:'4px 0'}}>
+                <option value="">نوع الوحدة</option>
+                <option value="palace">قصر</option>
+                <option value="villa">فيلا</option>
+                <option value="apartment">شقة</option>
+                <option value="clinic">عيادة</option>
+                <option value="shop">محل</option>
+                <option value="office">مكتب</option>
+                <option value="penthouse">بنتهاوس</option>
+                <option value="townhouse">تاون هاوس</option>
+              </select>
+              <select name="developer" value={form.developer} onChange={handleChange} style={{width:'100%',margin:'4px 0'}}>
+                <option value="">المطور العقاري</option>
+                {developers.map(d => <option key={d.id} value={d.name}>{d.name}</option>)}
+              </select>
+              <select name="compound" value={form.compound} onChange={handleChange} style={{width:'100%',margin:'4px 0'}}>
+                <option value="">الكمباوند</option>
+                {compounds.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+              </select>
+              <input name="owner" placeholder="اسم المالك (اختياري)" value={form.owner} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <input name="area" placeholder="المساحة (م²)" value={form.area} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <input name="rooms" placeholder="عدد الغرف" value={form.rooms} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <input name="baths" placeholder="عدد الحمامات" value={form.baths} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <label><input type="checkbox" name="pool" checked={form.pool} onChange={handleChange} /> حمام سباحة</label>
+              <label><input type="checkbox" name="garden" checked={form.garden} onChange={handleChange} /> جاردن</label>
+              <input name="contact" placeholder="بيانات التواصل" value={form.contact} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <input name="details" placeholder="تفاصيل إضافية" value={form.details} onChange={handleChange} style={{width:'100%',margin:'4px 0'}} />
+              <div style={{margin:'8px 0'}}>صور بانوراما 360:
+                <input type="file" accept="image/*" multiple onChange={e => handleFile(e, 'panorama360')} />
+              </div>
+              <div style={{margin:'8px 0'}}>نماذج 3D (GLB):
+                <input type="file" accept=".glb,.gltf,model/gltf-binary" multiple onChange={e => handleFile(e, 'model3d')} />
+              </div>
+              <div style={{margin:'8px 0'}}>صور السلايدر:
+                <input type="file" accept="image/*" multiple onChange={e => handleFile(e, 'sliderImages')} />
+              </div>
+              <div style={{margin:'8px 0'}}>لون الخط:
+                <input type="color" name="fontColor" value={form.fontColor} onChange={handleChange} />
+              </div>
+              <div style={{margin:'8px 0'}}>حجم الخط:
+                <input type="number" name="fontSize" value={form.fontSize} min={10} max={40} onChange={handleChange} />
+              </div>
+              <button onClick={handleAddUnit} style={{background:'#2196f3',color:'#fff',border:'none',borderRadius:8,padding:'8px 24px',marginTop:12,cursor:'pointer'}}>
+                إضافة الوحدة
+              </button>
             </div>
-            <div style={{margin:'8px 0'}}>نماذج 3D (GLB):
-              <input type="file" accept=".glb,.gltf,model/gltf-binary" multiple onChange={e => handleFile(e, 'model3d')} />
+            <div style={{flex:2,minWidth:320}}>
+              <h4>الوحدات المضافة (تجريبي)</h4>
+              <div style={{display:'flex',flexWrap:'wrap',gap:16}}>
+                {units.map((u, i) => (
+                  <div key={i} style={{border:'1px solid #eee',borderRadius:12,padding:12,minWidth:220,maxWidth:260}}>
+                    <b style={{color:u.fontColor,fontSize:u.fontSize}}>{u.title}</b>
+                    <div>النوع: {u.type}</div>
+                    <div>المطور: {u.developer}</div>
+                    <div>الكمباوند: {u.compound}</div>
+                    <div>المساحة: {u.area} م²</div>
+                    <div>الغرف: {u.rooms} | الحمامات: {u.baths}</div>
+                    {u.pool && <div>حمام سباحة</div>}
+                    {u.garden && <div>جاردن</div>}
+                    <div>التواصل: {u.contact}</div>
+                    <div>تفاصيل: {u.details}</div>
+                    {u.panorama360 && u.panorama360.length > 0 && <img src={u.panorama360[0]} alt="بانوراما" style={{width:'100%',borderRadius:8,margin:'8px 0'}} />}
+                    {u.model3d && u.model3d.length > 0 && <span style={{color:'#2196f3'}}>نموذج 3D مرفوع</span>}
+                    {u.sliderImages && u.sliderImages.length > 0 && <span style={{color:'#2196f3'}}>صور سلايدر مرفوعة</span>}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div style={{margin:'8px 0'}}>صور السلايدر:
-              <input type="file" accept="image/*" multiple onChange={e => handleFile(e, 'sliderImages')} />
-            </div>
-            <div style={{margin:'8px 0'}}>لون الخط:
-              <input type="color" name="fontColor" value={form.fontColor} onChange={handleChange} />
-            </div>
-            <div style={{margin:'8px 0'}}>حجم الخط:
-              <input type="number" name="fontSize" value={form.fontSize} min={10} max={40} onChange={handleChange} />
-            </div>
-            <button onClick={handleAddUnit} style={{background:'#2196f3',color:'#fff',border:'none',borderRadius:8,padding:'8px 24px',marginTop:12,cursor:'pointer'}}>
-              إضافة الوحدة
-            </button>
           </div>
-          <div style={{flex:2,minWidth:320}}>
-            <h4>الوحدات المضافة (تجريبي)</h4>
-            <div style={{display:'flex',flexWrap:'wrap',gap:16}}>
-              {units.map((u, i) => (
-                <div key={i} style={{border:'1px solid #eee',borderRadius:12,padding:12,minWidth:220,maxWidth:260}}>
-                  <b style={{color:u.fontColor,fontSize:u.fontSize}}>{u.title}</b>
-                  <div>النوع: {u.type}</div>
-                  <div>المطور: {u.developer}</div>
-                  <div>الكمباوند: {u.compound}</div>
-                  <div>المساحة: {u.area} م²</div>
-                  <div>الغرف: {u.rooms} | الحمامات: {u.baths}</div>
-                  {u.pool && <div>حمام سباحة</div>}
-                  {u.garden && <div>جاردن</div>}
-                  <div>التواصل: {u.contact}</div>
-                  <div>تفاصيل: {u.details}</div>
-                  {u.panorama360 && u.panorama360.length > 0 && <img src={u.panorama360[0]} alt="بانوراما" style={{width:'100%',borderRadius:8,margin:'8px 0'}} />}
-                  {u.model3d && u.model3d.length > 0 && <span style={{color:'#2196f3'}}>نموذج 3D مرفوع</span>}
-                  {u.sliderImages && u.sliderImages.length > 0 && <span style={{color:'#2196f3'}}>صور سلايدر مرفوعة</span>}
-                </div>
-              ))}
-            </div>
-          </div>
+          <ExportCSV />
         </div>
       )}
       {tab==='المطورين' && (
@@ -283,6 +302,36 @@ const AdminPanel: React.FC = () => {
                 <button onClick={()=>handleDeleteAd(a.id)} style={{background:'#e53935',color:'#fff',border:'none',borderRadius:8,padding:'4px 12px',marginTop:8,cursor:'pointer'}}>حذف</button>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+      {tab==='المستخدمون' && (
+        <div>
+          <h4>قائمة المستخدمين الجدد والمطورين</h4>
+          <table style={{width:'100%',margin:'16px 0',borderCollapse:'collapse'}}>
+            <thead>
+              <tr style={{background:'#f5f7fa'}}>
+                <th style={{padding:8,border:'1px solid #eee'}}>الاسم</th>
+                <th style={{padding:8,border:'1px solid #eee'}}>البريد</th>
+                <th style={{padding:8,border:'1px solid #eee'}}>النوع</th>
+                <th style={{padding:8,border:'1px solid #eee'}}>تاريخ التسجيل</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(u => (
+                <tr key={u.id}>
+                  <td style={{padding:8,border:'1px solid #eee'}}>{u.name}</td>
+                  <td style={{padding:8,border:'1px solid #eee'}}>{u.email}</td>
+                  <td style={{padding:8,border:'1px solid #eee'}}>{u.type}</td>
+                  <td style={{padding:8,border:'1px solid #eee'}}>{u.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* مكان لنظام التسكين الذكي للمطورين لاحقاً */}
+          <div style={{marginTop:24,padding:16,background:'#e0eafc',borderRadius:12}}>
+            <b>نظام التسكين الذكي للمطورين (قريباً):</b>
+            <p style={{margin:'8px 0 0 0',color:'#555'}}>سيتم هنا عرض اقتراحات تسكين الوحدات على المطورين تلقائياً بناءً على الذكاء الاصطناعي واحتياجات السوق.</p>
           </div>
         </div>
       )}
